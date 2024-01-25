@@ -5,7 +5,9 @@ import androidx.compose.ui.graphics.Color
 
 @Immutable
 data class ChartData(
+    val label: String,
+    val value: Float,
     val color: Color,
-    val data: Float,
-    val label: String
-)
+) {
+    fun getPercentageValue(): String = "${value.toInt()}%"
+}

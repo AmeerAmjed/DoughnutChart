@@ -3,7 +3,6 @@ package com.github.ameeramjed.chart.component
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,35 +12,37 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.ameeramjed.chart.model.ChartData
+import com.github.ameeramjed.chart.theme.DoughnutChartTheme
+import com.github.ameeramjed.chart.theme.dimens
 import com.github.ameeramjed.chart.util.asAngle
 
 
 @Composable
 fun DoughnutChart(
     state: List<ChartData>,
+    modifier: Modifier = Modifier,
     chartSize: Int = 132,
     delayAnimationCart: Int = 1000
 ) {
 
-    val animatable = remember {
+    val chartAnimatable = remember {
         Animatable(-90f)
     }
 
-    LaunchedEffect(key1 = animatable) {
-        animatable.animateTo(
+    LaunchedEffect(key1 = chartAnimatable) {
+        chartAnimatable.animateTo(
             targetValue = 270f,
             animationSpec = tween(
                 delayMillis = delayAnimationCart,
@@ -50,17 +51,17 @@ fun DoughnutChart(
         )
     }
 
-    val currentSweepAngle = animatable.value
+    val currentSweepAngle = chartAnimatable.value
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(MaterialTheme.dimens.space16)
     ) {
 
         Box(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(MaterialTheme.dimens.space16)
                 .size(chartSize.dp)
                 .align(Alignment.CenterHorizontally),
             contentAlignment = Alignment.Center
@@ -79,7 +80,7 @@ fun DoughnutChart(
                 for (index in 0..state.lastIndex) {
 
                     val chartData = state[index]
-                    val sweepAngle = chartData.data.asAngle
+                    val sweepAngle = chartData.value.asAngle
 
                     if (startAngle <= currentSweepAngle) {
                         drawArc(
@@ -106,7 +107,7 @@ fun DoughnutChart(
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             state.forEach { item ->
-                ItemInfoChart(item.color, item.label, item.data.toString())
+                ItemInfoChart(item)
             }
         }
 
@@ -114,39 +115,16 @@ fun DoughnutChart(
 }
 
 @Composable
-fun ItemInfoChart(
-    color: Color,
-    label: String,
-    persistent: String,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceAround,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(20.dp)
-                .clip(MaterialTheme.shapes.extraSmall)
-                .background(color)
-                .padding(horizontal = 4.dp),
-        )
+@Preview(showBackground = true)
+private fun DoughnutChartPreview() {
+    val chartDataList = listOf(
+        ChartData("Todo", 50F, Color.Cyan),
+        ChartData("Progress", 20F, Color.Red),
+        ChartData("Done", 30F, Color.Blue),
+    )
 
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 8.dp),
-        ) {
-            Text(
-                text = persistent,
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    MaterialTheme.colorScheme.primary,
-                )
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodySmall
-            )
-
-        }
+    DoughnutChartTheme {
+        DoughnutChart(chartDataList)
     }
 }
 
