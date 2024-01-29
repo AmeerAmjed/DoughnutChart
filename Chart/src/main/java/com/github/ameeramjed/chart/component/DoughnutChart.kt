@@ -21,6 +21,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.ameeramjed.chart.model.ChartData
@@ -34,7 +36,14 @@ fun DoughnutChart(
     state: List<ChartData>,
     modifier: Modifier = Modifier,
     chartSize: Int = 132,
-    delayAnimationCart: Int = 1000
+    delayAnimationCart: Int = 1000,
+    valueTextString: TextStyle = MaterialTheme.typography.bodyLarge.copy(
+        MaterialTheme.colorScheme.primary,
+        fontWeight = FontWeight.Bold
+    ),
+    labelTextString: TextStyle = MaterialTheme.typography.bodySmall.copy(
+        color = MaterialTheme.colorScheme.secondary,
+    ),
 ) {
 
     val chartAnimatable = remember {
@@ -107,7 +116,11 @@ fun DoughnutChart(
             horizontalArrangement = Arrangement.SpaceAround,
         ) {
             state.forEach { item ->
-                ItemInfoChart(item)
+                ItemInfoChart(
+                    item,
+                    valueTextString = valueTextString,
+                    labelTextString = labelTextString
+                )
             }
         }
 

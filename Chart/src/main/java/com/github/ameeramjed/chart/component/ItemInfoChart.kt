@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.ameeramjed.chart.model.ChartData
@@ -26,14 +25,9 @@ import com.github.ameeramjed.chart.theme.dimens
 @Composable
 fun ItemInfoChart(
     state: ChartData,
+    valueTextString: TextStyle,
+    labelTextString: TextStyle,
     sizeBoxColor: Int = 20,
-    valueTextString: TextStyle = MaterialTheme.typography.bodyLarge.copy(
-        MaterialTheme.colorScheme.primary,
-        fontWeight = FontWeight.Bold
-    ),
-    labelTextString: TextStyle = MaterialTheme.typography.bodySmall.copy(
-        color = MaterialTheme.colorScheme.secondary,
-    ),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -69,7 +63,8 @@ fun ItemInfoChart(
 private fun ItemInfoChartPreview() {
     DoughnutChartTheme {
         ItemInfoChart(
-            ChartData("Done", 30F, Color.Blue)
+            ChartData("Done", 30F, Color.Blue),
+            TextStyle(), TextStyle(),
         )
     }
 }
