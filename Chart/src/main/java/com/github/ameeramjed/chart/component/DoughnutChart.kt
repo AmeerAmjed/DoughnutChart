@@ -36,6 +36,7 @@ fun DoughnutChart(
     state: List<ChartData>,
     modifier: Modifier = Modifier,
     chartSize: Int = 132,
+    strokeWidth: Float = 50F,
     delayAnimationCart: Int = 1000,
     valueTextString: TextStyle = MaterialTheme.typography.bodyLarge.copy(
         MaterialTheme.colorScheme.primary,
@@ -82,8 +83,7 @@ fun DoughnutChart(
                     .aspectRatio(1f)
             ) {
                 val width = size.width
-                val radius = width / 2f
-                val strokeWidth = radius * .3f
+
                 var startAngle = -90f
 
                 for (index in 0..state.lastIndex) {
