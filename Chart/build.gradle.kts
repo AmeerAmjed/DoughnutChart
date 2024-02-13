@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.kotlinAndroid)
     `maven-publish`
+    signing
 }
 
 android {
@@ -19,6 +20,7 @@ android {
     publishing {
         singleVariant("release") {
             withSourcesJar()
+            withJavadocJar()
         }
     }
 
@@ -65,5 +67,41 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
 }
 
+val ossrhUsername: String by project
+val ossrhPassword: String by project
 
-apply(from = "../publish-package.gradle")
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+                groupId = "io.github.ameeramjed"
+                version = "1.6.5"
+
+                pom {
+                    name.set(artifactId)
+                    description.set("This library it's simple dount chart.")
+
+                    scm {
+                        connection.set("scm:git:git@github.com:AmeerAmjed/DountChart.git")
+                        url.set("https://github.com/AmeerAmjed/DountChart.git")
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                url = uri("https://s01.oss.sonatype.org/content/repositories/releases/")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+    }
+
+    signing {
+        sign(publishing.publications)
+    }
+
+}
