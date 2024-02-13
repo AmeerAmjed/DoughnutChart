@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.github.ameeramjed"
+    namespace = "io.github.ameeramjed"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.github.ameeramjed"
+        applicationId = "io.github.ameeramjed"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
